@@ -17,7 +17,7 @@ Essentials
 ----------
 
 Declare your regular mybatis mapper, like this:
-```
+```java
 @Mapper
 public interface UserMapper {
   @Select("select * from users order by id")
@@ -33,7 +33,7 @@ public interface UserMapper {
 
 Notice the `@Mapper` annotation - it declares your mapper as a `@Singleton` so that you able to inject this later on in your service:
 
-```
+```java
 @Singleton
 public class FooService {
   private final UserMapper userMapper;
@@ -52,9 +52,21 @@ Thats it! Micronaut-mybatis will take care of instantiating SqlSessionFactory, c
 
 Every mapper call is made in a single transaction, so, if you want to make multiple calls withing transaction, just declare a default method in your mapper:
 
-```
+```java
+@Mapper
+public interface UserMapper {
+  @Select("select * from users order by id")
+  List<User> getUsers();
+
+  @Select("select * from users where id=#{value}")
+  User getUser(String userId);
+
+  @Insert("insert into users VALUES (#{id},  #{name})")
+  void insert(User user);
+  
   default User insertAndSelect(User user) {
     insert(user);
     return getUser(user.getId());
   }
+}
 ```
