@@ -64,7 +64,7 @@ public class MapperIntroductionAdvice implements MethodInterceptor<Object, Objec
             }
             return result;
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException(e);
+            throw sneakyThrow(e.getCause());
         }
     }
 
@@ -82,5 +82,16 @@ public class MapperIntroductionAdvice implements MethodInterceptor<Object, Objec
             result[i] = definedValue;
         }
         return result;
+    }
+
+
+    public static RuntimeException sneakyThrow(Throwable t) {
+        if (t == null) throw new NullPointerException("t");
+        return MapperIntroductionAdvice.<RuntimeException>sneakyThrow0(t);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Throwable> T sneakyThrow0(Throwable t) throws T {
+        throw (T)t;
     }
 }

@@ -16,14 +16,14 @@
 package org.micronaut.mybatis.sample;
 
 import io.micronaut.test.annotation.MicronautTest;
+import org.apache.ibatis.binding.BindingException;
 import org.junit.jupiter.api.Test;
 import org.micronaut.mybatis.sample.domain.User;
 import org.micronaut.mybatis.sample.mapper.UserMapper;
 
 import javax.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest
 public class MapperTest extends SqlTest {
@@ -57,5 +57,16 @@ public class MapperTest extends SqlTest {
     User inserted = userMapper.insertAndSelect(newUser);
     assertNotNull(inserted);
     assertEquals(newUser, inserted);
+  }
+
+  @Test
+  final void testItThrowsMybatisExceptionsUnwrapped() throws Exception {
+    User newUser = new User();
+    newUser.setId("u6");
+    newUser.setName("Mario");
+
+    assertThrows(BindingException.class, () -> {
+      userMapper.failingInsert(newUser);
+    });
   }
 }

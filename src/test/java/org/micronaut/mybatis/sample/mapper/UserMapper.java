@@ -37,4 +37,7 @@ public interface UserMapper {
     insert(user);
     return getUser(user.getId());
   }
+
+  @Insert("insert into users VALUES (#{id},  #{name})")
+  User failingInsert(User user);
 }
