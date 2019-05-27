@@ -1,0 +1,49 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.15"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.7.RELEASE"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: "net.ltgt.apt-eclipse"
+apply plugin: "net.ltgt.apt-idea"
+apply plugin: "io.spring.dependency-management"
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+apply from: rootDir.absolutePath + '/dependencies.gradle'
+
+dependencies {
+    implementation('org.slf4j:slf4j-api')
+
+    compile("org.mybatis:mybatis")
+    compile("io.micronaut:micronaut-runtime")
+    annotationProcessor("io.micronaut:micronaut-inject-java")
+    testAnnotationProcessor("io.micronaut:micronaut-inject-java")
+
+    testRuntime('com.h2database:h2')
+    testRuntime('org.apache.logging.log4j:log4j-core')
+    testRuntime('org.apache.logging.log4j:log4j-slf4j-impl')
+    testRuntime('io.micronaut.configuration:micronaut-jdbc-hikari')
+    testRuntime("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("io.micronaut.test:micronaut-test-junit5")
+    testImplementation("org.mockito:mockito-junit-jupiter")
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+        exceptionFormat = 'full'
+    }
+}

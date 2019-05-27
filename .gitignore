@@ -1,0 +1,12 @@
+.gradle
+build
+out
+/target
+/.settings
+/.classpath
+/.project
+*.epoch
+*.log
+*.iml
+/.idea
+.mvn/wrapper/maven-wrapper.jar

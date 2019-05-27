@@ -1,0 +1,25 @@
+
+dependencyManagement {
+    def versions = new Object() {
+        def micronautVersion = "1.1.0"
+        def mybatis = "3.5.1"
+    }
+
+    imports {
+        mavenBom "io.micronaut:micronaut-bom:${versions.micronautVersion}"
+        mavenBom "org.apache.logging.log4j:log4j-bom:2.11.2"
+        mavenBom "org.junit:junit-bom:5.4.2"
+    }
+    
+    dependencies {
+        dependency("org.mybatis:mybatis:${versions.mybatis}")
+        dependency("org.slf4j:slf4j-api:1.7.26")
+
+        // testing
+        dependency("org.postgresql:postgresql:42.2.5")
+        dependency("org.testcontainers:postgresql:1.7.3")
+        dependency("com.github.javafaker:javafaker:0.18")
+        dependency("org.hamcrest:hamcrest-all:1.3")
+        dependency("org.mockito:mockito-junit-jupiter:2.22.0")
+    }
+}
